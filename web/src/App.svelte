@@ -2,6 +2,7 @@
   import svelteLogo from './assets/svelte.svg'
   import viteLogo from './assets/vite.svg'
   import heroImg from './assets/hero.png'
+  import carImg from './assets/car.png'
   import Counter from './lib/Counter.svelte'
   import Battery from './lib/Battery.svelte'
 
@@ -10,9 +11,7 @@
 
 <section id="center">
   <div class="hero">
-    <img src={heroImg} class="base" width="170" height="179" alt="" />
-    <img src={svelteLogo} class="framework" alt="Svelte logo" />
-    <img src={viteLogo} class="vite" alt="Vite logo" />
+    <img src={carImg} alt="" />
   </div>
   <div>
     <h1>Get started</h1>
