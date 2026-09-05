@@ -18,7 +18,4 @@
   <Counter />
 </section>
 
-<div class="ticks"></div>
-
-<div class="ticks"></div>
 <section id="spacer"></section>
