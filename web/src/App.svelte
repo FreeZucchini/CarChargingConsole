@@ -3,7 +3,7 @@
   import viteLogo from './assets/vite.svg'
   import heroImg from './assets/hero.png'
   import Counter from './lib/Counter.svelte'
-  import BatteryBar from './lib/BatteryBar.svelte'
+  import Battery from './lib/Battery.svelte'
 
   let charge = $state(25)
 </script>
@@ -16,7 +16,7 @@
   </div>
   <div>
     <h1>Get started</h1>
-    <BatteryBar charge={charge} />
+    <Battery charge={charge} />
   </div>
   <Counter />
 </section>
