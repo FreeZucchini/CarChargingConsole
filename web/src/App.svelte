@@ -3,6 +3,9 @@
   import viteLogo from './assets/vite.svg'
   import heroImg from './assets/hero.png'
   import Counter from './lib/Counter.svelte'
+  import BatteryBar from './lib/BatteryBar.svelte'
+
+  let charge = $state(25)
 </script>
 
 <section id="center">
@@ -13,7 +16,7 @@
   </div>
   <div>
     <h1>Get started</h1>
-    <p>Edit <code>src/App.svelte</code> and save to test <code>HMR</code></p>
+    <BatteryBar charge={charge} />
   </div>
   <Counter />
 </section>
