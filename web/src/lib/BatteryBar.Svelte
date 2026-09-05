@@ -1,5 +1,5 @@
 <script>
-    let { charge } = $props()
+    let { charge = 0 } = $props()
 </script>
 
 <style>
