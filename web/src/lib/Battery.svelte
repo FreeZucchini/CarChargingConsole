@@ -4,11 +4,12 @@
 
 <style>
   .battery-bar {
-    width: 100px;
-    height: 20px;
-    border: 2px solid black;
+    width: 200px;
+    height: 40px;
+    border: 3px solid black;
     border-radius: 3px;
     overflow: hidden;
+    margin: 0 auto;
   }
 
   .fill {
@@ -19,6 +20,6 @@
 </style>
 
 <div class="battery-bar">
-    <div class="fill" style={`width: ${charge}%`}></div>
+    <div class="fill" style={`width: ${charge * 2}%`}></div>
 </div>
 

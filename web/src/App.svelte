@@ -14,7 +14,7 @@
     <img src={carImg} alt="" />
   </div>
   <div>
-    <h1>Get started</h1>
+    <h2>Your Car</h2>
     <Battery charge={charge} />
   </div>
   <Counter />
