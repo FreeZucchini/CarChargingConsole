@@ -19,12 +19,12 @@ public class StopCharging
     }
 
     [Function("StopCharging")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/charge/stop")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "charge/stop")] HttpRequest req)
     {
         string serviceConnectionString = Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!;
         using ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(serviceConnectionString);
 
-        var methodInvocation = new CloudToDeviceMethod("StartCharging")
+        var methodInvocation = new CloudToDeviceMethod("StopCharging")
         {
             ResponseTimeout = TimeSpan.FromSeconds(10)
         };

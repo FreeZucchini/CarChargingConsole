@@ -26,6 +26,19 @@ await deviceClient.SetMethodHandlerAsync("StopCharging", (request, context) =>
     return Task.FromResult(new MethodResponse(200));
 }, null);
 
+await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =>
+{
+    var level = new
+    {
+        batteryPercentage = Math.Round(batteryPercentage, 1),
+        isCharging
+    };
+
+    string json = JsonConvert.SerializeObject(level);
+    var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+    return Task.FromResult(response);
+}, null);
+
 Console.WriteLine("Simulator running");
 
 while (true) 

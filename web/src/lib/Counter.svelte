@@ -6,18 +6,18 @@
     const API_BASE = "https://cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
     try {
         const response = await fetch(`${API_BASE}/${endpoint}`, {
-          method: "POST"
-        });
+        method: "POST"
+      });
         if (!response.ok) {
           throw new Error(`Request failed: ${response.status}`);
         }
 
         charging = !charging;
         console.log(`${endpoint} succeeded`);
-      } catch (err) {
+    } catch (err) {
         console.log(`${endpoint} failed: `, err);
-      }
     }
+  }
       
 </script>
 

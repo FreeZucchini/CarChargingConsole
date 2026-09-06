@@ -19,7 +19,7 @@ public class StartCharging
     }
 
     [Function("StartCharging")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/charge/start")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "charge/start")] HttpRequest req)
     {
         string serviceConnectionString = Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!;
         using ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(serviceConnectionString);
