@@ -40,3 +40,4 @@ C:\Users\Rigel\Documents\Projects\CarChargingConsole\simulator\obj\Debug\net8.0\
 C:\Users\Rigel\Documents\Projects\CarChargingConsole\simulator\obj\Debug\net8.0\CarSimulator.pdb
 C:\Users\Rigel\Documents\Projects\CarChargingConsole\simulator\obj\Debug\net8.0\CarSimulator.genruntimeconfig.cache
 C:\Users\Rigel\Documents\Projects\CarChargingConsole\simulator\obj\Debug\net8.0\ref\CarSimulator.dll
+C:\Users\Rigel\Documents\Projects\CarChargingConsole\simulator\obj\Debug\net8.0\CarSimulator.sourcelink.json

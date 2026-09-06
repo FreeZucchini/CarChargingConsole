@@ -3,8 +3,9 @@
 
   async function toggle() {
     const endpoint = charging ? "charge/stop" : "charge/start"; 
+    const API_BASE = "https://carchargingconsole-api.azurewebsites.net/api";
     try {
-        const response = await fetch("/api/charge/start", {
+        const response = await fetch(`${API_BASE}/${endpoint}`, {
           method: "POST"
         });
         if (!response.ok) {

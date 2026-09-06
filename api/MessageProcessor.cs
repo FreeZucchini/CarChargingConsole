@@ -14,7 +14,7 @@ public class MessageProcessor
     }
 
     [Function(nameof(MessageProcessor))]
-    public void Run([EventHubTrigger("samples-workitems", Connection = "")] EventData[] events)
+    public void Run([EventHubTrigger("iothub-ehub-charginghu-59699048-019bad7f85", Connection = "IoTHubEventHubConnectionString")] EventData[] events)
     {
         foreach (EventData @event in events)
         {
