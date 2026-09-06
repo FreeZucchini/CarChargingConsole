@@ -47,6 +47,6 @@
 </style>
 
 <div class="battery-bar">
-    <div class="fill" style={`width: ${charge * 2}%`}></div>
+    <div class="fill" style={`width: ${charge}%`}></div>
 </div>
 

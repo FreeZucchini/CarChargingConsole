@@ -45,11 +45,11 @@ while (true)
 {
     if (isCharging && batteryPercentage < 100) 
     {
-        batteryPercentage = Math.Min(100, batteryPercentage + 1);
+        batteryPercentage = Math.Min(100, batteryPercentage + 2);
     } 
     else if (!isCharging && batteryPercentage > 0)
     {
-        batteryPercentage = Math.Max(0, batteryPercentage - 0.01);
+        batteryPercentage = Math.Max(0, batteryPercentage - 1);
     }
 
     var telemetry = new
