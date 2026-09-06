@@ -3,7 +3,7 @@
 
   async function toggle() {
     const endpoint = charging ? "charge/stop" : "charge/start"; 
-    const API_BASE = "https://carchargingconsole-api.azurewebsites.net/api";
+    const API_BASE = "cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
     try {
         const response = await fetch(`${API_BASE}/${endpoint}`, {
           method: "POST"
