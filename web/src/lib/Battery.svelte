@@ -15,6 +15,10 @@
       const data = await response.json();
       charge = data.batteryPercentage;
       console.log(`status recieved: `, data);
+
+      // Save charge into the session storage object
+      sessionStorage.setItem("charge", charge.toString());
+
     } catch (err) {
       console.log("Failed to get status:", err);
     }
@@ -27,6 +31,10 @@
       clearInterval(interval)
     };
   });
+
+  if (sessionStorage.getItem("charge")) {
+    charge = Number(sessionStorage.getItem("charge"));
+  }
 </script>
 
 <style>
