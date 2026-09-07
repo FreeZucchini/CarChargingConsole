@@ -36,7 +36,7 @@
     border: 3px solid black;
     border-radius: 3px;
     overflow: hidden;
-    margin: 0 auto;
+    margin-right: 20px;
   }
 
   .fill {
@@ -50,7 +50,7 @@
   <div class="battery-bar">
       <div class="fill" style={`width: ${charge}%`}></div>
   </div>
-  <h2>{charge}%</h2>
+  <h2 style="font-size: 35px"> {charge}%</h2>
 </div>
 
 
