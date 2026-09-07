@@ -37,6 +37,8 @@
     border-radius: 3px;
     overflow: hidden;
     margin: 0 auto;
+    display: flex;
+    flex-direction: row;
   }
 
   .fill {
@@ -48,5 +50,6 @@
 
 <div class="battery-bar">
     <div class="fill" style={`width: ${charge}%`}></div>
+    <h2>${charge}%</h2>
 </div>
 
