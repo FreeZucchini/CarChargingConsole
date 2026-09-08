@@ -16,7 +16,7 @@
   </div>
   <div>
     <h1>Your Car</h1>
-    <Battery charge={charge} />
+    <Battery />
   </div>
   <ChargeButton />
   <Scheduler />

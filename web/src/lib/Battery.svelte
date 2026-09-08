@@ -1,6 +1,6 @@
 <script>
   import {onMount} from 'svelte'; 
-  let { charge = 0 } = $props()
+  import { carStatus } from './store.js';
 
   async function getStatusFromCar() {
     const API_BASE = "https://cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
@@ -13,11 +13,16 @@
         throw new Error(`Request failed: ${response.status}`);
       }
       const data = await response.json();
-      charge = data.batteryPercentage;
-      console.log(`status recieved: `, data);
 
-      // Save charge into the session storage object
-      localStorage.setItem("charge", charge.toString());
+      carStatus.update((s) => ({
+        ...s,
+        charge: data.batteryPercentage,
+        charging: data.isCharging,
+        setSchedule: data.scheduleSet,
+        scheduleTime: data.scheduledTime ?? s.scheduleTime
+      }));
+
+      console.log(`status recieved: `, data);
 
     } catch (err) {
       console.log("Failed to get status:", err);
@@ -26,15 +31,9 @@
 
   onMount(() => {
     const interval = setInterval(getStatusFromCar, 5000);
-
-    return () => {
-      clearInterval(interval)
-    };
+    getStatusFromCar();
+    return () => clearInterval(interval);
   });
-
-  if (localStorage.getItem("charge")) {
-    charge = Number(localStorage.getItem("charge"));
-  }
 </script>
 
 <style>
@@ -56,9 +55,9 @@
 
 <div style="display: flex; flex-direction: row">
   <div class="battery-bar">
-      <div class="fill" style={`width: ${charge}%`}></div>
+      <div class="fill" style={`width: ${$carStatus.charge}%`}></div>
   </div>
-  <h2 style="font-size: 35px"> {charge}%</h2>
+  <h2 style="font-size: 35px">{$carStatus.charge}%</h2>
 </div>
 
 

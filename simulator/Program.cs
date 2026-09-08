@@ -10,20 +10,31 @@ DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(deviceConnec
 
 bool isCharging = false;
 double batteryPercentage = 100.0;
+TimeOnly startChargeTime = new TimeOnly(0, 0, 0);
+bool scheduleSet = false; 
 
+void StartCharging()
+{
+    isCharging = true;
+    Console.WriteLine("StartCharging");
+}
+
+void StopCharging()
+{
+    isCharging = false;
+    Console.WriteLine("StopCharging");
+}
 
 // We need to use SetMethodHandlerAsync to process immediate requests from the IoT hub and send back responses
 await deviceClient.SetMethodHandlerAsync("StartCharging", (request, context) =>
 {
-    isCharging = true;
-    Console.WriteLine("StartCharging");
+    StartCharging();
     return Task.FromResult(new MethodResponse(200));
 }, null);
 
 await deviceClient.SetMethodHandlerAsync("StopCharging", (request, context) =>
 {
-    isCharging = false;
-    Console.WriteLine("StopCharging");
+    StopCharging();
     return Task.FromResult(new MethodResponse(200));
 }, null);
 
@@ -42,9 +53,14 @@ await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =
 
 await deviceClient.SetMethodHandlerAsync("SetSchedule", (request, context) =>
 {
-    string time = Encoding.UTF8.GetString(request.Data);
+    string json = Encoding.UTF8.GetString(request.Data);
 
-    Console.WriteLine($"Recieved start charging time: {time}");
+    Schedule schedule = JsonConvert.DeserializeObject<Schedule>(json);
+
+    startChargeTime = TimeOnly.Parse(schedule.Time);
+    scheduleSet = true;
+
+    Console.WriteLine($"Recieved start charging time: {json}");
 
     var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
     return Task.FromResult(response);
@@ -52,7 +68,9 @@ await deviceClient.SetMethodHandlerAsync("SetSchedule", (request, context) =>
 
 await deviceClient.SetMethodHandlerAsync("CancelSchedule", (request, context) =>
 {
-    string time = Encoding.UTF8.GetString(request.Data);
+    string data = Encoding.UTF8.GetString(request.Data);
+
+    scheduleSet = false;
 
     Console.WriteLine($"Cancelled charging schedule");
 
@@ -78,6 +96,7 @@ while (true)
         deviceId = "Car1",
         batteryPercentage = Math.Round(batteryPercentage, 2),
         isCharging,
+        scheduleSet,
         timestamp = DateTime.UtcNow
     };
 
@@ -88,8 +107,22 @@ while (true)
         ContentEncoding = "utf-8"
     };
 
+    TimeOnly currentTime = TimeOnly.FromDateTime(DateTime.Now);
+    if (scheduleSet &&
+        currentTime.Hour == startChargeTime.Hour &&
+        currentTime.Minute == startChargeTime.Minute)
+    {
+        StartCharging();
+        scheduleSet = false;
+    }
+
     await deviceClient.SendEventAsync(message);
     Console.WriteLine($"Sent: {json}");
 
-    await Task.Delay(5000);
+    await Task.Delay(3000);
+}
+
+public class Schedule
+{
+    public string Time { get; set; } = "";
 }

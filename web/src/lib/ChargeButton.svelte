@@ -1,9 +1,10 @@
 <script>
-  let charging = $state(false)
+  import { carStatus } from './store.js';
+  const API_BASE = "https://cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
 
   async function toggle() {
-    const endpoint = charging ? "charge/stop" : "charge/start"; 
-    const API_BASE = "https://cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
+    const isCharging = $carStatus.charging
+    const endpoint = isCharging ? "charge/stop" : "charge/start"; 
     try {
         const response = await fetch(`${API_BASE}/${endpoint}`, {
         method: "POST"
@@ -12,19 +13,13 @@
           throw new Error(`Request failed: ${response.status}`);
         }
 
-        charging = !charging;
+        carStatus.update((s) => ({ ...s, charging: !isCharging }));
         console.log(`${endpoint} succeeded`);
-        localStorage.setItem("charging", charging.toString());
     } catch (err) {
         console.log(`${endpoint} failed: `, err);
     }
   }
-
-  if (localStorage.getItem("charging")) {
-    const storedCharging = localStorage.getItem("charging");
-    charging = storedCharging === "true";
-  }
       
 </script>
 
-<button type="button" class="counter" onclick={toggle}>{charging ? "Charging" : "Not Charging"}</button>
+<button type="button" class="counter" onclick={toggle}>{$carStatus.charging ? "Charging" : "Not Charging"}</button>

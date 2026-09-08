@@ -1,10 +1,12 @@
 <script>
-  let setSchedule = $state(false);
-  let startchargeTime = $state("");
+  import { carStatus } from './store.js';
+  const API_BASE = "https://cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
+
+  let startchargeTime = $state($carStatus.scheduleTime);
 
   async function toggle() {
+    const setSchedule = $carStatus.setSchedule;
     const endpoint = setSchedule ? "schedule/cancel" : "schedule/set"; 
-    const API_BASE = "https://cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
 
     const payload = {
       time: startchargeTime
@@ -19,21 +21,19 @@
           throw new Error(`Request failed: ${response.status}`);
         }
 
-        setSchedule = !setSchedule;
+        carStatus.update((s) => ({
+        ...s,
+        setSchedule: !setSchedule,
+        scheduleTime: setSchedule ? s.scheduleTime : startchargeTime
+      }));
         console.log(`${endpoint} succeeded`);
-        localStorage.setItem("setSchedule", setSchedule.toString());
     } catch (err) {
         console.log(`${endpoint} failed: `, err);
     }
   }
-
-  if (localStorage.getItem("setSchedule")) {
-    const storedScheduleBool = localStorage.getItem("setSchedule");
-    setSchedule = storedScheduleBool === "true";
-  }
       
 </script>
 
-<button type="button" class="counter" onclick={toggle}>{setSchedule ? "Cancel Schedule" : "Set Schedule"}</button>
+<button type="button" class="counter" onclick={toggle}>{$carStatus.setSchedule ? "Cancel Schedule" : "Set Schedule"}</button>
 <input type="time" bind:value={startchargeTime} required/>
 
