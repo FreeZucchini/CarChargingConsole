@@ -34,6 +34,8 @@
       
 </script>
 
-<button type="button" class="counter" onclick={toggle}>{$carStatus.setSchedule ? "Cancel Schedule" : "Set Schedule"}</button>
-<input type="time" bind:value={startchargeTime} required/>
+<div> 
+  <button type="button" class="counter" onclick={toggle}>{$carStatus.setSchedule ? "Cancel Schedule" : "Set Schedule"}</button>
+  <input type="time" bind:value={startchargeTime} required/>
+</div>
 
