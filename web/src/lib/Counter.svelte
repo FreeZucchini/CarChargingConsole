@@ -14,9 +14,14 @@
 
         charging = !charging;
         console.log(`${endpoint} succeeded`);
+        sessionStorage.setItem("charging", charging.toString());
     } catch (err) {
         console.log(`${endpoint} failed: `, err);
     }
+  }
+
+  if (sessionStorage.getItem("charging")) {
+    charging = Boolean(sessionStorage.getItem("charging"));
   }
       
 </script>
