@@ -34,6 +34,6 @@
       
 </script>
 
-<button type="button" class="counter" onclick={toggle}>{setSchedule ? "Set Schedule" : "Cancel Schedule"}</button>
+<button type="button" class="counter" onclick={toggle}>{setSchedule ? "Cancel Schedule" : "Set Schedule"}</button>
 <input type="time" bind:value={startchargeTime} required/>
 

@@ -17,7 +17,7 @@ public class CancelSchedule
     }
 
     [Function("CancelSchedule")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "schedule/cancel")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "schedule/cancel")] HttpRequest req)
     {
         string serviceConnectionString = Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!;
         using ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(serviceConnectionString);
