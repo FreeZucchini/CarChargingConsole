@@ -17,7 +17,7 @@
       console.log(`status recieved: `, data);
 
       // Save charge into the session storage object
-      sessionStorage.setItem("charge", charge.toString());
+      localStorage.setItem("charge", charge.toString());
 
     } catch (err) {
       console.log("Failed to get status:", err);
@@ -32,8 +32,8 @@
     };
   });
 
-  if (sessionStorage.getItem("charge")) {
-    charge = Number(sessionStorage.getItem("charge"));
+  if (localStorage.getItem("charge")) {
+    charge = Number(localStorage.getItem("charge"));
   }
 </script>
 

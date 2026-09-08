@@ -14,14 +14,14 @@
 
         charging = !charging;
         console.log(`${endpoint} succeeded`);
-        sessionStorage.setItem("charging", charging.toString());
+        localStorage.setItem("charging", charging.toString());
     } catch (err) {
         console.log(`${endpoint} failed: `, err);
     }
   }
 
-  if (sessionStorage.getItem("charging")) {
-    const storedCharging = sessionStorage.getItem("charging");
+  if (localStorage.getItem("charging")) {
+    const storedCharging = localStorage.getItem("charging");
     charging = storedCharging === "true";
   }
       
