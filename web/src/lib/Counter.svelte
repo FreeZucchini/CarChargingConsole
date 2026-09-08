@@ -1,4 +1,6 @@
 <script>
+    import { onMount } from "svelte";
+
   let charging = $state(false)
 
   async function toggle() {
@@ -20,8 +22,23 @@
     }
   }
 
-  const storedCharging = localStorage.getItem("charging");
-  charging = storedCharging === "true";
+  onMount(() => {
+    const storedCharging = localStorage.getItem("charging");
+    charging = storedCharging === "true";
+
+    function handleStorage(event) {
+      if (event.key === "charging") {
+        charging = storedCharging === "true";
+      }
+    }
+
+    window.addEventListener("storage1", handleStorage);
+
+    return () => {
+      window.removeEventListener("storage1", handleStorage);
+    }
+  });
+  
       
 </script>
 

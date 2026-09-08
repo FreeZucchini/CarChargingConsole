@@ -25,14 +25,23 @@
   }
 
   onMount(() => {
+    charge = Number(localStorage.getItem("charge"));
+
+    function handleStorage(event) {
+      if (event.key === "charge") {
+        charge = Number(localStorage.getItem("charge"));
+      }
+    }
+
+    window.addEventListener("storage2", handleStorage);
+    
     const interval = setInterval(getStatusFromCar, 5000);
 
     return () => {
-      clearInterval(interval)
+      window.removeEventListener("storage2", handleStorage);
+      clearInterval(interval);
     };
   });
-
-  charge = Number(localStorage.getItem("charge"));
   
 </script>
 
