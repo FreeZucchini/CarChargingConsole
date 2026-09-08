@@ -14,14 +14,14 @@
 
         charging = !charging;
         console.log(`${endpoint} succeeded`);
-        sessionStorage.setItem("charging", charging.toString());
+        sessionStorage.setItem("charging", charging);
     } catch (err) {
         console.log(`${endpoint} failed: `, err);
     }
   }
 
   if (sessionStorage.getItem("charging")) {
-    charging = Boolean(sessionStorage.getItem("charging"));
+    charging = sessionStorage.getItem("charging");
   }
       
 </script>
