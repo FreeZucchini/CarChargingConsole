@@ -32,9 +32,8 @@
     };
   });
 
-  if (localStorage.getItem("charge")) {
-    charge = Number(localStorage.getItem("charge"));
-  }
+  charge = Number(localStorage.getItem("charge"));
+  
 </script>
 
 <style>

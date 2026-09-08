@@ -20,10 +20,8 @@
     }
   }
 
-  if (localStorage.getItem("charging")) {
-    const storedCharging = localStorage.getItem("charging");
-    charging = storedCharging === "true";
-  }
+  const storedCharging = localStorage.getItem("charging");
+  charging = storedCharging === "true";
       
 </script>
 
