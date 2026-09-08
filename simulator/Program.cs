@@ -11,6 +11,7 @@ DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(deviceConnec
 bool isCharging = false;
 double batteryPercentage = 100.0;
 
+
 // We need to use SetMethodHandlerAsync to process immediate requests from the IoT hub and send back responses
 await deviceClient.SetMethodHandlerAsync("StartCharging", (request, context) =>
 {
@@ -36,6 +37,26 @@ await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =
 
     string json = JsonConvert.SerializeObject(level);
     var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+    return Task.FromResult(response);
+}, null);
+
+await deviceClient.SetMethodHandlerAsync("SetSchedule", (request, context) =>
+{
+    string time = Encoding.UTF8.GetString(request.Data);
+
+    Console.WriteLine($"Recieved start charging time: {time}");
+
+    var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
+    return Task.FromResult(response);
+}, null);
+
+await deviceClient.SetMethodHandlerAsync("CancelSchedule", (request, context) =>
+{
+    string time = Encoding.UTF8.GetString(request.Data);
+
+    Console.WriteLine($"Cancelled charging schedule");
+
+    var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
     return Task.FromResult(response);
 }, null);
 

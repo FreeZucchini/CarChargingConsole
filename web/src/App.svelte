@@ -5,6 +5,7 @@
   import carImg from './assets/car.png'
   import ChargeButton from './lib/ChargeButton.svelte'
   import Battery from './lib/Battery.svelte'
+  import Scheduler from './lib/Scheduler.svelte'
 
   let charge = $state(25)
 </script>
@@ -18,16 +19,7 @@
     <Battery charge={charge} />
   </div>
   <ChargeButton />
-  <div class="scheduler">
-
-  </div>
+  <Scheduler />
 </section>
 
 <section id="spacer"></section>
-
-<style>
-  .scheduler {
-    display: flex;
-    flex-direction: row;
-  }
-</style>
