@@ -3,7 +3,7 @@
   const API_BASE = "https://cardashboardbackend-arg8cmfgf6befkhd.westus3-01.azurewebsites.net/api";
 
   let startchargeTime = $state($carStatus.scheduleTime);
-  let errorMessage = $state("";)
+  let errorMessage = $state("");
 
   async function toggle() {
     const setSchedule = $carStatus.setSchedule;
