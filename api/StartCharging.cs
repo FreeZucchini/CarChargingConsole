@@ -24,7 +24,7 @@ public class StartCharging
     }
 
     [Function("StartCharging")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "charge/start")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "charge/start")] HttpRequest req)
     {
 
         var methodInvocation = new CloudToDeviceMethod("StartCharging")
@@ -42,10 +42,7 @@ public class StartCharging
             }
 
             _logger.LogWarning("Device failed to execute StartCharging with status {Status}", result.Status);
-            return new OkObjectResult(new {success = false, deviceStatus = result.Status})
-            {
-                StatusCode = 502
-            };
+            return new OkObjectResult(new {success = false, deviceStatus = result.Status});
         }
         catch (Exception ex)
         {

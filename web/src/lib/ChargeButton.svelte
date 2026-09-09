@@ -11,7 +11,7 @@
 
     try {
         const response = await fetch(`${API_BASE}/${endpoint}`, {
-        method: "POST"
+        method: "PUT"
       });
 
       const data = await response.json().catch(() => null);

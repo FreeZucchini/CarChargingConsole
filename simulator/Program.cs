@@ -36,7 +36,6 @@ await deviceClient.SetMethodHandlerAsync("StartCharging", (request, context) =>
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"StartCharging failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
@@ -50,7 +49,6 @@ await deviceClient.SetMethodHandlerAsync("StopCharging", (request, context) =>
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"StopCharging failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
@@ -68,13 +66,11 @@ await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =
         };
 
         string json = JsonConvert.SerializeObject(level);
-        Console.WriteLine($"Sent: {json}");
         var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
         return Task.FromResult(response);
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"GetBatteryLevel failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
@@ -84,26 +80,21 @@ await deviceClient.SetMethodHandlerAsync("SetSchedule", (request, context) =>
     try
     {
         startChargeTimeString = Encoding.UTF8.GetString(request.Data);
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Received raw payload: {startChargeTimeString}");
 
         Schedule? schedule = JsonConvert.DeserializeObject<Schedule>(startChargeTimeString);
         if (schedule == null || string.IsNullOrWhiteSpace(schedule.Time))
         {
-            Console.WriteLine("SetSchedule failed: payload missing or malformed Time field");
-            return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes("Bad payload: missing Time field"), 400));
+            return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes("Bad payload: missing time field"), 400));
         }
 
         startChargeTime = TimeOnly.Parse(schedule.Time);
         scheduleSet = true;
-
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Received start charging time: {startChargeTime}");
-
-        var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
+        
+        var response = new MethodResponse(200);
         return Task.FromResult(response);
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] SetSchedule failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
@@ -113,14 +104,12 @@ await deviceClient.SetMethodHandlerAsync("CancelSchedule", (request, context) =>
     try
     {
         scheduleSet = false;
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Cancelled charging schedule");
 
-        var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
+        var response = new MethodResponse(200);
         return Task.FromResult(response);
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] CancelSchedule failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
