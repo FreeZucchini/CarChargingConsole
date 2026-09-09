@@ -31,8 +31,27 @@ public class SetSchedule
 
         methodInvocation.SetPayloadJson(body);  
 
-        CloudToDeviceMethodResult result = await serviceClient.InvokeDeviceMethodAsync("Car1", methodInvocation);
+        try
+        {
+            CloudToDeviceMethodResult result = await serviceClient.InvokeDeviceMethodAsync("Car1", methodInvocation);
+            if (result.Status == 200)
+            {
+                return new OkObjectResult(new { success = true, deviceStatus = result.Status });
+            }
 
-        return new OkObjectResult($"Command sent. Device responded with status: {result.Status}");
+            _logger.LogWarning("Device failed to execute SetSchedule with status {Status}", result.Status);
+            return new ObjectResult(new { success = false, deviceStatus = result.Status }) 
+            {
+                StatusCode = 502 
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to reach device to execute SetSchedule");
+            return new ObjectResult(new { success = false, error = "Could not reach the Car1" }) 
+            { 
+                StatusCode = 503 
+            };
+        }
     }
 }

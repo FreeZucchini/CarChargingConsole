@@ -29,8 +29,28 @@ public class StopCharging
             ResponseTimeout = TimeSpan.FromSeconds(10)
         };
 
-        CloudToDeviceMethodResult result = await serviceClient.InvokeDeviceMethodAsync("Car1", methodInvocation);
+        try
+        {
+            CloudToDeviceMethodResult result = await serviceClient.InvokeDeviceMethodAsync("Car1", methodInvocation);
 
-        return new OkObjectResult($"Command sent. Device responded with status: {result.Status}");
+            if (result.Status == 200)
+            {
+                return new OkObjectResult(new {success = true, deviceStatus = result.Status});
+            }
+
+            _logger.LogWarning("Device failed to execute StopCharging with status {Status}", result.Status);
+            return new OkObjectResult(new {success = false, deviceStatus = result.Status})
+            {
+                StatusCode = 502
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to reach device to execute StopCharging");
+            return new OkObjectResult(new {success = false, error = "Could not reach the Car1"})
+            {
+                StatusCode = 503
+            };   
+        }
     }
 }

@@ -10,6 +10,7 @@ DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(deviceConnec
 
 bool isCharging = false;
 double batteryPercentage = 100.0;
+string startChargeTimeString = "";
 TimeOnly startChargeTime = new TimeOnly(0, 0, 0);
 bool scheduleSet = false; 
 
@@ -43,24 +44,27 @@ await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =
     var level = new
     {
         batteryPercentage = Math.Round(batteryPercentage, 1),
-        isCharging
+        isCharging,
+        scheduleSet,
+        scheduleTime = startChargeTimeString
     };
 
     string json = JsonConvert.SerializeObject(level);
+    Console.WriteLine($"Sent: {json}");
     var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
     return Task.FromResult(response);
 }, null);
 
 await deviceClient.SetMethodHandlerAsync("SetSchedule", (request, context) =>
 {
-    string json = Encoding.UTF8.GetString(request.Data);
+    startChargeTimeString = Encoding.UTF8.GetString(request.Data);
 
-    Schedule schedule = JsonConvert.DeserializeObject<Schedule>(json);
+    Schedule schedule = JsonConvert.DeserializeObject<Schedule>(startChargeTimeString);
 
     startChargeTime = TimeOnly.Parse(schedule.Time);
     scheduleSet = true;
 
-    Console.WriteLine($"Recieved start charging time: {json}");
+    Console.WriteLine($"Recieved start charging time: {startChargeTimeString}");
 
     var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
     return Task.FromResult(response);
@@ -91,22 +95,6 @@ while (true)
         batteryPercentage = Math.Max(0, batteryPercentage - 1);
     }
 
-    var telemetry = new
-    {
-        deviceId = "Car1",
-        batteryPercentage = Math.Round(batteryPercentage, 2),
-        isCharging,
-        scheduleSet,
-        timestamp = DateTime.UtcNow
-    };
-
-    string json = JsonConvert.SerializeObject(telemetry);
-    var message = new Message(Encoding.UTF8.GetBytes(json))
-    {
-        ContentType = "application/json",
-        ContentEncoding = "utf-8"
-    };
-
     TimeOnly currentTime = TimeOnly.FromDateTime(DateTime.Now);
     if (scheduleSet &&
         currentTime.Hour == startChargeTime.Hour &&
@@ -115,9 +103,6 @@ while (true)
         StartCharging();
         scheduleSet = false;
     }
-
-    await deviceClient.SendEventAsync(message);
-    Console.WriteLine($"Sent: {json}");
 
     await Task.Delay(3000);
 }

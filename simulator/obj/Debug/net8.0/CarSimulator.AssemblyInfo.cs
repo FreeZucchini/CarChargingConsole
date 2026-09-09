@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CarSimulator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aed4a01132662c8560ce980bb255827cdaa3524c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c39da2ea54ef655cf4fb995e3f0ec5b64543237f")]
 [assembly: System.Reflection.AssemblyProductAttribute("CarSimulator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CarSimulator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
