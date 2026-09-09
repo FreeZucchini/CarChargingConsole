@@ -36,6 +36,7 @@ await deviceClient.SetMethodHandlerAsync("StartCharging", (request, context) =>
     }
     catch (Exception ex)
     {
+        Console.WriteLine($"StartCharging failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
@@ -49,15 +50,16 @@ await deviceClient.SetMethodHandlerAsync("StopCharging", (request, context) =>
     }
     catch (Exception ex)
     {
+        Console.WriteLine($"StopCharging failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
 
-await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =>
+await deviceClient.SetMethodHandlerAsync("GetBatteryStatus", (request, context) =>
 {
     try
     {
-        var level = new
+        var status = new
         {
             batteryPercentage = Math.Round(batteryPercentage, 1),
             isCharging,
@@ -65,12 +67,14 @@ await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =
             scheduleTime = startChargeTimeString
         };
 
-        string json = JsonConvert.SerializeObject(level);
+        string json = JsonConvert.SerializeObject(status);
+        Console.WriteLine($"Sent: {json}");
         var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
         return Task.FromResult(response);
     }
     catch (Exception ex)
     {
+        Console.WriteLine($"GetBatteryStatus failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
@@ -89,12 +93,15 @@ await deviceClient.SetMethodHandlerAsync("SetSchedule", (request, context) =>
 
         startChargeTime = TimeOnly.Parse(schedule.Time);
         scheduleSet = true;
+
+        Console.WriteLine($"Received start charging time: {startChargeTime}");
         
         var response = new MethodResponse(200);
         return Task.FromResult(response);
     }
     catch (Exception ex)
     {
+        Console.WriteLine($"SetSchedule failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);
@@ -104,12 +111,14 @@ await deviceClient.SetMethodHandlerAsync("CancelSchedule", (request, context) =>
     try
     {
         scheduleSet = false;
+        Console.WriteLine($"Cancelled charging schedule");
 
         var response = new MethodResponse(200);
         return Task.FromResult(response);
     }
     catch (Exception ex)
     {
+        Console.WriteLine($"CancelSchedule failed: {ex.Message}");
         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
     }
 }, null);

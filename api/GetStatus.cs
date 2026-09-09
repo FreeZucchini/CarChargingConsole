@@ -26,7 +26,7 @@ public class GetStatus
     {
         req.HttpContext.Response.Headers.Append("Cache-Control", "no-store");
 
-        var methodInvocation = new CloudToDeviceMethod("GetBatteryLevel")
+        var methodInvocation = new CloudToDeviceMethod("GetBatteryStatus")
         {
             ResponseTimeout = TimeSpan.FromSeconds(10)
         };
