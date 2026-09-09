@@ -23,6 +23,8 @@
         body: JSON.stringify(payload)
       });
 
+      console.log(payload);
+
       const data = await response.json().catch(() => null);
       
       if (!response.ok || !data?.success) {

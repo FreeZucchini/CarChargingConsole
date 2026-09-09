@@ -11,6 +11,10 @@ public class SetSchedule
 {
     private readonly ILogger<SetSchedule> _logger;
 
+    private static readonly ServiceClient serviceClient =
+        ServiceClient.CreateFromConnectionString(
+            Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!);
+
     public SetSchedule(ILogger<SetSchedule> logger)
     {
         _logger = logger;
@@ -19,8 +23,6 @@ public class SetSchedule
     [Function("SetSchedule")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "schedule/set")] HttpRequest req)
     {
-        string serviceConnectionString = Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!;
-        using ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(serviceConnectionString);
 
         var methodInvocation = new CloudToDeviceMethod("SetSchedule")
         {  

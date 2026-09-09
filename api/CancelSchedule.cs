@@ -11,6 +11,9 @@ public class CancelSchedule
 {
     private readonly ILogger<CancelSchedule> _logger;
 
+    private static readonly ServiceClient serviceClient =
+        ServiceClient.CreateFromConnectionString(
+            Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!);
     public CancelSchedule(ILogger<CancelSchedule> logger)
     {
         _logger = logger;
@@ -19,8 +22,6 @@ public class CancelSchedule
     [Function("CancelSchedule")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "schedule/cancel")] HttpRequest req)
     {
-        string serviceConnectionString = Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!;
-        using ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(serviceConnectionString);
 
         var methodInvocation = new CloudToDeviceMethod("CancelSchedule")
         {  

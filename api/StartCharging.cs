@@ -14,6 +14,10 @@ public class StartCharging
 {
     private readonly ILogger<StartCharging> _logger;
 
+    private static readonly ServiceClient serviceClient =
+        ServiceClient.CreateFromConnectionString(
+            Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!);
+
     public StartCharging(ILogger<StartCharging> logger)
     {
         _logger = logger;
@@ -22,8 +26,6 @@ public class StartCharging
     [Function("StartCharging")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "charge/start")] HttpRequest req)
     {
-        string serviceConnectionString = Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!;
-        using ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(serviceConnectionString);
 
         var methodInvocation = new CloudToDeviceMethod("StartCharging")
         {

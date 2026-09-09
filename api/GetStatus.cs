@@ -17,6 +17,10 @@ public class GetStatus
 {
     private readonly ILogger<GetStatus> _logger;
 
+    private static readonly ServiceClient serviceClient =
+        ServiceClient.CreateFromConnectionString(
+            Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!);
+
     public GetStatus(ILogger<GetStatus> logger)
     {
         _logger = logger;
@@ -28,9 +32,6 @@ public class GetStatus
     {
         var response = req.CreateResponse(HttpStatusCode.OK);
         response.Headers.Add("Content-Type", "application/json");
-
-        string serviceConnectionString = Environment.GetEnvironmentVariable("IoTHubServiceConnectionString")!;
-        using ServiceClient serviceClient = ServiceClient.CreateFromConnectionString(serviceConnectionString);
 
         var methodInvocation = new CloudToDeviceMethod("GetBatteryLevel")
         {

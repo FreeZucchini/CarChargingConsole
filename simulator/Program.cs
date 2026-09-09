@@ -29,57 +29,100 @@ void StopCharging()
 // We need to use SetMethodHandlerAsync to process immediate requests from the IoT hub and send back responses
 await deviceClient.SetMethodHandlerAsync("StartCharging", (request, context) =>
 {
-    StartCharging();
-    return Task.FromResult(new MethodResponse(200));
+    try
+    {
+        StartCharging();
+        return Task.FromResult(new MethodResponse(200));
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"StartCharging failed: {ex.Message}");
+        return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
+    }
 }, null);
 
 await deviceClient.SetMethodHandlerAsync("StopCharging", (request, context) =>
 {
-    StopCharging();
-    return Task.FromResult(new MethodResponse(200));
+    try
+    {
+        StopCharging();
+        return Task.FromResult(new MethodResponse(200));
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"StopCharging failed: {ex.Message}");
+        return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
+    }
 }, null);
 
 await deviceClient.SetMethodHandlerAsync("GetBatteryLevel", (request, context) =>
 {
-    var level = new
+    try
     {
-        batteryPercentage = Math.Round(batteryPercentage, 1),
-        isCharging,
-        scheduleSet,
-        scheduleTime = startChargeTimeString
-    };
+        var level = new
+        {
+            batteryPercentage = Math.Round(batteryPercentage, 1),
+            isCharging,
+            scheduleSet,
+            scheduleTime = startChargeTimeString
+        };
 
-    string json = JsonConvert.SerializeObject(level);
-    Console.WriteLine($"Sent: {json}");
-    var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
-    return Task.FromResult(response);
+        string json = JsonConvert.SerializeObject(level);
+        Console.WriteLine($"Sent: {json}");
+        var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+        return Task.FromResult(response);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"GetBatteryLevel failed: {ex.Message}");
+        return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
+    }
 }, null);
 
 await deviceClient.SetMethodHandlerAsync("SetSchedule", (request, context) =>
 {
-    startChargeTimeString = Encoding.UTF8.GetString(request.Data);
+    try
+    {
+        startChargeTimeString = Encoding.UTF8.GetString(request.Data);
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Received raw payload: {startChargeTimeString}");
 
-    Schedule schedule = JsonConvert.DeserializeObject<Schedule>(startChargeTimeString);
+        Schedule? schedule = JsonConvert.DeserializeObject<Schedule>(startChargeTimeString);
+        if (schedule == null || string.IsNullOrWhiteSpace(schedule.Time))
+        {
+            Console.WriteLine("SetSchedule failed: payload missing or malformed Time field");
+            return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes("Bad payload: missing Time field"), 400));
+        }
 
-    startChargeTime = TimeOnly.Parse(schedule.Time);
-    scheduleSet = true;
+        startChargeTime = TimeOnly.Parse(schedule.Time);
+        scheduleSet = true;
 
-    Console.WriteLine($"Recieved start charging time: {startChargeTimeString}");
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Received start charging time: {startChargeTime}");
 
-    var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
-    return Task.FromResult(response);
+        var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
+        return Task.FromResult(response);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] SetSchedule failed: {ex.Message}");
+        return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
+    }
 }, null);
 
 await deviceClient.SetMethodHandlerAsync("CancelSchedule", (request, context) =>
 {
-    string data = Encoding.UTF8.GetString(request.Data);
+    try
+    {
+        scheduleSet = false;
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] Cancelled charging schedule");
 
-    scheduleSet = false;
-
-    Console.WriteLine($"Cancelled charging schedule");
-
-    var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
-    return Task.FromResult(response);
+        var response = new MethodResponse(Encoding.UTF8.GetBytes("OK"), 200);
+        return Task.FromResult(response);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] CancelSchedule failed: {ex.Message}");
+        return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(ex.Message), 500));
+    }
 }, null);
 
 Console.WriteLine("Simulator running");
