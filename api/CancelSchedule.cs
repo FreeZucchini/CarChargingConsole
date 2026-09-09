@@ -20,7 +20,7 @@ public class CancelSchedule
     }
 
     [Function("CancelSchedule")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "schedule/cancel")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "schedule/off")] HttpRequest req)
     {
 
         var methodInvocation = new CloudToDeviceMethod("CancelSchedule")

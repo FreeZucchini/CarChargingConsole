@@ -21,7 +21,7 @@ public class SetSchedule
     }
 
     [Function("SetSchedule")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "schedule/set")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "schedule/on")] HttpRequest req)
     {
 
         var methodInvocation = new CloudToDeviceMethod("SetSchedule")

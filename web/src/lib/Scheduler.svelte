@@ -7,7 +7,7 @@
 
   async function toggle() {
     const setSchedule = $carStatus.setSchedule;
-    const endpoint = setSchedule ? "schedule/cancel" : "schedule/set"; 
+    const endpoint = setSchedule ? "schedule/off" : "schedule/on"; 
     errorMessage = "";
 
     const payload = {
@@ -16,7 +16,7 @@
     
     try {
         const response = await fetch(`${API_BASE}/${endpoint}`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
