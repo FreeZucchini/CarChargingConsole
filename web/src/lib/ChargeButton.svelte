@@ -16,7 +16,7 @@
 
       const data = await response.json().catch(() => null);
 
-      if (!response.ok) {
+      if (!response.ok || !data?.success) {
         throw new Error(data?.error ?? `Request failed: ${response.status}`);
       }
 

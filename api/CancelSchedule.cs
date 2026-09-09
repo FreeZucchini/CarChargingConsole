@@ -35,16 +35,16 @@ public class CancelSchedule
         try
         {
             CloudToDeviceMethodResult result = await serviceClient.InvokeDeviceMethodAsync("Car1", methodInvocation);
-            if (result.Status == 200)
+            //if (result.Status == 200)
             {
                 return new OkObjectResult(new { success = true, deviceStatus = result.Status });
             }
 
-            _logger.LogWarning("Device failed to execute CancelSchedule with status {Status}", result.Status);
-            return new ObjectResult(new { success = false, deviceStatus = result.Status }) 
-            {
-                StatusCode = 502 
-            };
+            // _logger.LogWarning("Device failed to execute CancelSchedule with status {Status}", result.Status);
+            // return new ObjectResult(new { success = false, deviceStatus = result.Status }) 
+            // {
+            //     StatusCode = 502 
+            // };
         }
         catch (Exception ex)
         {
